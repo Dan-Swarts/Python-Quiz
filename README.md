@@ -4,7 +4,7 @@
 
 ## Description
 
-Description
+This is a web-based application that serves up random Python quiz questions stored in a MongoDB database. Perfect for developers and enthusiasts, the app provides an engaging way to test and improve Python skills with a diverse set of questions, from beginner to advanced levels. Each quiz question is fetched dynamically, ensuring a unique challenge every time!
 
 ## GitHub Actions Workflow
 
