@@ -10,20 +10,17 @@ jobs:
     name: Test the Pull Request
     runs-on: ubuntu-latest
     steps:
+      - name: checkout code
+        uses: actions/checkout@v4es
+
       - name: install
-        uses: actions/checkout@v4
-        run: |
-          install: npm ci
+        run: npm ci
 
       - name: build
-        uses: actions/checkout@v4
-        run: |
-          build: npm run build
+        run: npm run build
 
       - name: start
-        uses: actions/checkout@v4
         run: npm run start
 
       - name: test
-        uses: actions/checkout@v4
         run: npm run test
