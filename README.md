@@ -4,10 +4,17 @@
 
 ## Description
 
-Description
+This is a web-based application that serves up random Python quiz questions stored in a MongoDB database. Perfect for developers and enthusiasts, the app provides an engaging way to test and improve Python skills with a diverse set of questions, from beginner to advanced levels. Each quiz question is fetched dynamically, ensuring a unique challenge every time!
+
+## GitHub Actions Workflow
+
+- [See how pull requests to the develop branch trigger the GitHub Actions workflow](https://drive.google.com/file/d/1_jKe8M0wK2hoDgdPaJI0mJKWP6hOSxwA/view?usp=sharing)
+
+- [See how pushes to main automatically trigger a re-deployment](https://drive.google.com/file/d/1WV2E_LOA3rrbRLgWWptrbE732vo54O8X/view?usp=sharing)
 
 ## 📁 Table of Contents
 
+- [GitHub Actions Workflow](#first)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Tests](#tests)
@@ -106,8 +113,6 @@ Then follow these instructions:
 
 - [Northwestern Bootcamp Team](https://sps.northwestern.edu/professional-development/)
 - [Daniel Swarts](https://github.com/Dan-Swarts)
-
-## GitHub Actions Workflow
 
 ## Contributing
 
