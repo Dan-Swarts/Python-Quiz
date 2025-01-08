@@ -20,7 +20,12 @@ jobs:
         run: npm run build
 
       - name: start
-        run: npm run start
+        run: | 
+        npm run start &
+        npx wait-on http://localhost:3001
 
       - name: test
         run: npm run test
+
+      - name: Stop server
+        run: pkill -f "npm run start" || true
