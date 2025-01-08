@@ -11,9 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Test
+
+      - name: install
         run: |
-          npm ci
-          npm run build
-          npm run start
-          npm run test
+          install: npm ci
+
+      - name: build
+        run: |
+          build: npm run build
+
+      - name: start
+        run: npm run start
+
+      - name: test
+        run: npm run test
