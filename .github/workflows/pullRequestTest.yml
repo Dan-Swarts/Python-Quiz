@@ -9,23 +9,47 @@ jobs:
   ci:
     name: Test the Pull Request
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: install
+      - name: Install Dependencies
         run: npm ci
 
-      - name: build
+      - name: Build Application
         run: npm run build
 
-      - name: start
+      - name: Start Server
         run: |
           npm run start &
           npx wait-on http://localhost:3001
 
-      - name: test
-        run: npm run test
+      - name: Run Tests
+        run: |
+          npx cypress run --reporter json --reporter-options output=results.json
 
-      - name: Stop server
+      - name: Generate Test Summary
+        run: |
+          # Check if results.json file exists
+          if [[ -f results.json ]]; then
+            total=$(jq '.totalTests' results.json)
+            passed=$(jq '.totalPassed' results.json)
+            failed=$(jq '.totalFailed' results.json)
+            pending=$(jq '.totalPending' results.json)
+            skipped=$(jq '.totalSkipped' results.json)
+            duration=$(jq '.totalDuration' results.json)
+
+            duration_seconds=$(echo "scale=3; $duration/1000" | bc)
+            echo "### Cypress Results" >> $GITHUB_STEP_SUMMARY
+            echo "| Result   | Passed ✅ | Failed ❌ | Pending 🙌 | Skipped ⏩ | Duration ⏳ |" >> $GITHUB_STEP_SUMMARY
+            echo "|----------|-----------|-----------|------------|------------|------------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Passing  | $passed   | $failed   | $pending   | $skipped   | ${duration_seconds}s |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No results.json file found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Stop Server
         run: pkill -f "npm run start" || true
+
+            
