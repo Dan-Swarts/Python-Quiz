@@ -29,8 +29,6 @@ jobs:
         run: |
           npx cypress run --reporter mochawesome --reporter-options output=results,json=true
 
-      
-            
       - name: Parse Test Results and Create Summary 
         run: | 
           total=$(jq '.stats.tests' cypress/results/mochawesome.json)
