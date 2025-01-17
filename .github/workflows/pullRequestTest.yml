@@ -27,29 +27,28 @@ jobs:
 
       - name: Run Tests
         run: |
-          npx cypress run --reporter json --reporter-options output=results.json
+          npx cypress run --reporter mochawesome --reporter-options output=results,json=true
 
-      - name: Generate Test Summary
-        run: |
-          # Check if results.json file exists
-          if [[ -f results.json ]]; then
-            total=$(jq '.totalTests' results.json)
-            passed=$(jq '.totalPassed' results.json)
-            failed=$(jq '.totalFailed' results.json)
-            pending=$(jq '.totalPending' results.json)
-            skipped=$(jq '.totalSkipped' results.json)
-            duration=$(jq '.totalDuration' results.json)
+      
+            
+      - name: Parse Test Results and Create Summary 
+        run: | 
+          total=$(jq '.stats.tests' cypress/results/mochawesome.json)
+          passed=$(jq '.stats.passes' cypress/results/mochawesome.json)
+          failed=$(jq '.stats.failures' cypress/results/mochawesome.json)
+          skipped=$(jq '.stats.skipped' cypress/results/mochawesome.json)
+          duration=$(jq '.stats.duration' cypress/results/mochawesome.json)
 
-            duration_seconds=$(echo "scale=3; $duration/1000" | bc)
-            echo "### Cypress Results" >> $GITHUB_STEP_SUMMARY
-            echo "| Result   | Passed ✅ | Failed ❌ | Pending 🙌 | Skipped ⏩ | Duration ⏳ |" >> $GITHUB_STEP_SUMMARY
-            echo "|----------|-----------|-----------|------------|------------|------------|" >> $GITHUB_STEP_SUMMARY
-            echo "| Passing  | $passed   | $failed   | $pending   | $skipped   | ${duration_seconds}s |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "No results.json file found" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "### Cypress Results" >> $GITHUB_STEP_SUMMARY
+          echo "| Result | Passed ✅ | Failed ❌ | Pending 🙌 | Skipped ⏩ | Duration ⏳ |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-----------|-----------|------------|------------|------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Passing | $passed | $failed | 0 | $skipped | ${duration}ms |" >> $GITHUB_STEP_SUMMARY
+        
+        - name: Upload Test Results
+          uses: actions/upload-artifact@v3 
+          with: 
+            name: cypress-results
+            path: ./cypress/results/
 
       - name: Stop Server
         run: pkill -f "npm run start" || true
-
-            
